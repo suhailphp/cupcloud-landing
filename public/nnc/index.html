@@ -3,15 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nejoum Noof Cafeteria — Menu coming soon</title>
-<meta name="description" content="Qaser Nejoum Al Noof Cafeteria, Al Hooshi, Sharjah — open 24 hours. Our digital menu is launching soon.">
-<meta property="og:title" content="Nejoum Noof Cafeteria">
-<meta property="og:description" content="Open 24 hours · Al Hooshi, Sharjah · Digital menu launching soon">
+<title>Qaser Nejoum Noof Cafeteria — Menu</title>
+<meta name="description" content="Qaser Nejoum Noof Cafeteria, Al Hooshi, Sharjah — open 24 hours. Browse our full menu, call, or order via WhatsApp.">
+<meta property="og:title" content="Qaser Nejoum Noof Cafeteria">
+<meta property="og:description" content="Open 24 hours · Al Hooshi, Sharjah · Browse the menu, call, or order on WhatsApp">
 <meta property="og:type" content="restaurant">
+<meta property="og:image" content="https://nnc.cupcloud.ae/assets/logo.png">
 <meta name="theme-color" content="#FAF3E7">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⭐</text></svg>">
+<link rel="icon" href="assets/logo.png">
+<link rel="apple-touch-icon" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="assets/pages/page-01.jpg">
+<link rel="preload" as="image" href="assets/pages/page-02.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -35,6 +39,7 @@
     overflow-x:hidden;
     position:relative;
   }
+  body.modal-open{overflow:hidden}
   body::before, body::after{
     content:'';position:fixed;border-radius:50%;
     filter:blur(100px);opacity:0.4;pointer-events:none;z-index:0;
@@ -58,24 +63,9 @@
   .wrap{
     position:relative;z-index:2;
     min-height:100vh;display:flex;flex-direction:column;
-    padding:28px 24px 32px;max-width:980px;margin:0 auto;
+    padding:24px 24px 32px;max-width:980px;margin:0 auto;
   }
-  header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
-  .crest{display:flex;align-items:center;gap:14px}
-  .crest-mark{
-    width:48px;height:48px;flex-shrink:0;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .crest-mark svg{width:100%;height:100%}
-  .crest-text{
-    font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:19px;
-    letter-spacing:-0.005em;line-height:1.05;color:var(--red);
-  }
-  .crest-text small{
-    display:block;font-family:'DM Sans',sans-serif;
-    font-size:10px;letter-spacing:0.14em;text-transform:uppercase;
-    color:var(--ink-soft);font-weight:600;margin-top:4px;
-  }
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}
   .badges{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
   .badge-24{
     display:inline-flex;align-items:center;gap:7px;
@@ -100,139 +90,264 @@
     border:1px solid var(--line);
     font-size:11px;font-weight:600;color:var(--ink-soft);
   }
-  main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:36px 0 24px}
-  .hero{text-align:center;margin-bottom:48px}
-  .eyebrow{
-    display:inline-flex;align-items:center;gap:12px;margin-bottom:22px;
-    font-size:11px;letter-spacing:0.24em;text-transform:uppercase;
-    color:var(--gold);font-weight:700;
+  main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px 0 16px}
+
+  .brand-block{
+    display:flex;flex-direction:column;align-items:center;
+    margin-bottom:36px;
     animation:fadeUp 0.7s 0.05s both ease;
   }
-  .eyebrow::before, .eyebrow::after{
-    content:'';width:28px;height:1px;background:var(--gold);opacity:0.6;
+  .brand-logo{
+    width:140px;height:auto;margin-bottom:14px;
+    filter:drop-shadow(0 8px 20px rgba(193,57,39,0.18));
   }
-  h1{
+  .brand-wordmark{text-align:center;line-height:1}
+  .brand-qaser{
+    display:block;font-family:'Fraunces',Georgia,serif;
+    font-style:italic;font-weight:400;
+    font-size:18px;color:var(--ink-soft);
+    letter-spacing:0.04em;margin-bottom:4px;
+  }
+  .brand-name{
+    display:block;font-family:'Fraunces',Georgia,serif;
+    font-weight:600;font-size:clamp(38px, 7.5vw, 64px);
+    color:var(--red);letter-spacing:-0.015em;line-height:0.95;
+  }
+  .brand-suffix{
+    display:block;font-family:'DM Sans',sans-serif;
+    font-weight:700;font-size:13px;color:var(--gold);
+    letter-spacing:0.42em;margin-top:8px;
+  }
+  .brand-arabic{
+    margin-top:10px;font-family:'Noto Naskh Arabic', serif;
+    font-size:16px;color:var(--ink-soft);direction:rtl;
+  }
+  .brand-arabic .small{font-size:12px;opacity:0.8;margin-left:4px}
+
+  .hero{text-align:center;margin-bottom:32px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:12px;margin-bottom:18px;
+    font-size:11px;letter-spacing:0.24em;text-transform:uppercase;
+    color:var(--gold);font-weight:700;
+    animation:fadeUp 0.7s 0.1s both ease;
+  }
+  .eyebrow::before, .eyebrow::after{content:'';width:28px;height:1px;background:var(--gold);opacity:0.6}
+  .hero-title{
     font-family:'Fraunces',Georgia,serif;font-weight:300;
-    font-size:clamp(40px, 7.5vw, 78px);letter-spacing:-0.025em;line-height:1.02;
-    margin-bottom:22px;
-    animation:fadeUp 0.8s 0.15s both ease;
+    font-size:clamp(26px, 4.5vw, 38px);letter-spacing:-0.02em;line-height:1.1;
+    margin-bottom:14px;
+    animation:fadeUp 0.8s 0.18s both ease;
   }
-  h1 em{
+  .hero-title em{
     font-style:italic;font-weight:400;
     background:linear-gradient(120deg, var(--red), var(--gold));
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   }
   .lede{
-    font-size:clamp(15px, 1.8vw, 18px);color:var(--ink-soft);
-    max-width:540px;margin:0 auto 14px;line-height:1.6;
+    font-size:15px;color:var(--ink-soft);max-width:480px;
+    margin:0 auto;line-height:1.6;
     animation:fadeUp 0.8s 0.25s both ease;
   }
-  .arabic{
-    font-family:'Noto Naskh Arabic', 'Fraunces', serif;
-    font-size:18px;color:var(--red);direction:rtl;font-weight:500;
-    animation:fadeUp 0.8s 0.3s both ease;
+
+  .cta-row{
+    display:flex;flex-direction:column;gap:12px;
+    max-width:440px;margin:0 auto 32px;
+    animation:fadeUp 0.9s 0.3s both ease;
   }
+  .cta{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    padding:16px 26px;border-radius:14px;
+    font-size:15px;font-weight:600;text-decoration:none;
+    border:none;font-family:inherit;cursor:pointer;
+    transition:transform 0.15s ease, box-shadow 0.2s ease;
+  }
+  .cta svg{width:18px;height:18px}
+  .cta-menu{
+    background:linear-gradient(135deg, var(--red), var(--red-deep));
+    color:#fff;
+    box-shadow:0 16px 38px -12px rgba(193,57,39,0.55);
+  }
+  .cta-menu:hover{transform:translateY(-2px);box-shadow:0 20px 44px -12px rgba(193,57,39,0.65)}
+  .cta-whatsapp{background:#25D366;color:#fff;box-shadow:0 14px 30px -10px rgba(37,211,102,0.4)}
+  .cta-whatsapp:hover{transform:translateY(-1px)}
+  .cta-call{background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);border:1px solid var(--line);color:var(--ink)}
+  .cta-call:hover{background:rgba(255,255,255,0.95)}
+
   .cards{
     display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
-    gap:14px;margin-bottom:32px;
-    animation:fadeUp 0.9s 0.35s both ease;
+    gap:12px;margin-bottom:32px;
+    animation:fadeUp 0.9s 0.4s both ease;
   }
   .card{
     background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);
-    border:1px solid var(--line);border-radius:18px;
-    padding:18px 20px;color:inherit;text-decoration:none;
+    border:1px solid var(--line);border-radius:16px;
+    padding:16px 18px;color:inherit;text-decoration:none;
     transition:transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     display:block;
   }
-  .card:hover{
-    transform:translateY(-2px);
-    box-shadow:0 16px 40px -16px rgba(42,24,16,0.18);
-    border-color:rgba(193,57,39,0.2);
-  }
+  .card:hover{transform:translateY(-2px);box-shadow:0 16px 40px -16px rgba(42,24,16,0.18);border-color:rgba(193,57,39,0.2)}
   .card-icon{
-    width:34px;height:34px;border-radius:10px;
+    width:32px;height:32px;border-radius:9px;
     display:flex;align-items:center;justify-content:center;
-    margin-bottom:10px;background:var(--bg-warm);
+    margin-bottom:8px;background:var(--bg-warm);
   }
-  .card-icon svg{width:17px;height:17px;color:var(--red)}
+  .card-icon svg{width:16px;height:16px;color:var(--red)}
   .card-label{
-    font-size:10px;letter-spacing:0.18em;text-transform:uppercase;
-    color:var(--ink-soft);font-weight:700;margin-bottom:4px;
+    font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--ink-soft);font-weight:700;margin-bottom:3px;
   }
   .card-value{
-    font-family:'Fraunces',Georgia,serif;font-size:16px;font-weight:500;
+    font-family:'Fraunces',Georgia,serif;font-size:15px;font-weight:500;
     letter-spacing:-0.005em;line-height:1.3;
   }
-  .card-value small{
-    display:block;font-family:'DM Sans',sans-serif;font-size:12.5px;
-    color:var(--ink-soft);font-weight:400;margin-top:3px;
-  }
-  .cta-row{
-    display:flex;gap:12px;flex-wrap:wrap;justify-content:center;
-    animation:fadeUp 0.9s 0.45s both ease;
-    margin-bottom:28px;
-  }
-  .cta{
-    display:inline-flex;align-items:center;gap:9px;
-    padding:14px 26px;border-radius:13px;
-    font-size:14.5px;font-weight:600;text-decoration:none;
-    transition:transform 0.15s ease, box-shadow 0.2s ease;
-  }
-  .cta svg{width:16px;height:16px}
-  .cta-whatsapp{
-    background:#25D366;color:#fff;
-    box-shadow:0 14px 30px -10px rgba(37,211,102,0.4);
-  }
-  .cta-whatsapp:hover{transform:translateY(-1px)}
-  .cta-call{
-    background:var(--red);color:#fff;
-    box-shadow:0 14px 30px -10px rgba(193,57,39,0.4);
-  }
-  .cta-call:hover{transform:translateY(-1px)}
+  .card-value small{display:block;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink-soft);font-weight:400;margin-top:2px}
+
   .socials{
-    display:flex;justify-content:center;gap:14px;margin-bottom:20px;
-    animation:fadeUp 1s 0.55s both ease;
+    display:flex;justify-content:center;gap:12px;margin-bottom:16px;
+    animation:fadeUp 1s 0.5s both ease;
   }
   .social{
-    width:42px;height:42px;border-radius:12px;
+    width:40px;height:40px;border-radius:11px;
     display:flex;align-items:center;justify-content:center;
     background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);
     border:1px solid var(--line);color:var(--ink-soft);
     transition:transform 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   }
   .social:hover{transform:translateY(-2px);color:var(--red);border-color:rgba(193,57,39,0.25)}
-  .social svg{width:18px;height:18px}
+  .social svg{width:17px;height:17px}
+
   .divider{
     display:flex;align-items:center;justify-content:center;gap:14px;
-    margin:24px auto;color:var(--gold);opacity:0.5;
-    animation:fadeUp 1s 0.6s both ease;
+    margin:20px auto;color:var(--gold);opacity:0.5;
+    animation:fadeUp 1s 0.55s both ease;
   }
-  .divider::before, .divider::after{
-    content:'';width:60px;height:1px;background:currentColor;
-  }
+  .divider::before, .divider::after{content:'';width:60px;height:1px;background:currentColor}
+
   footer{
-    padding-top:24px;border-top:1px dashed var(--line);
-    text-align:center;font-size:12.5px;color:var(--ink-soft);line-height:1.7;
+    padding-top:20px;border-top:1px dashed var(--line);
+    text-align:center;font-size:12px;color:var(--ink-soft);line-height:1.7;
   }
   footer a{color:var(--ink-soft);text-decoration:none;border-bottom:1px dotted var(--ink-soft)}
   footer a:hover{color:var(--ink)}
-  .powered{margin-top:8px;font-size:11px;opacity:0.7}
-  @keyframes fadeUp{
-    from{opacity:0;transform:translateY(14px)}
-    to{opacity:1;transform:none}
+  .powered{margin-top:6px;font-size:10.5px;opacity:0.7}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  /* ===================== FLIPBOOK MODAL ===================== */
+  .flip-modal{
+    position:fixed;inset:0;z-index:1000;
+    display:none;
+    background:rgba(20,12,8,0.92);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    opacity:0;
+    transition:opacity 0.3s ease;
   }
+  .flip-modal.open{display:flex;flex-direction:column;opacity:1}
+  .flip-modal .toolbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 18px;
+    background:rgba(20,12,8,0.6);
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    flex-shrink:0;
+  }
+  .toolbar-left{display:flex;align-items:center;gap:12px;color:#fff;min-width:0}
+  .toolbar-logo{width:30px;height:30px;flex-shrink:0}
+  .toolbar-title{
+    font-family:'Fraunces',serif;font-weight:500;font-size:15px;
+    letter-spacing:-0.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .toolbar-title small{
+    display:block;font-family:'DM Sans',sans-serif;font-size:10px;
+    color:rgba(255,255,255,0.5);font-weight:500;letter-spacing:0.14em;
+    text-transform:uppercase;margin-top:2px;
+  }
+  .toolbar-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .tool-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    padding:8px 12px;border-radius:10px;
+    background:rgba(255,255,255,0.08);color:#fff;
+    border:1px solid rgba(255,255,255,0.12);
+    font-size:12.5px;font-weight:500;text-decoration:none;
+    cursor:pointer;font-family:inherit;
+    transition:background 0.15s ease;
+  }
+  .tool-btn:hover{background:rgba(255,255,255,0.16)}
+  .tool-btn svg{width:14px;height:14px}
+  .tool-btn.close{
+    width:36px;height:36px;padding:0;border-radius:50%;
+    background:rgba(255,255,255,0.12);
+  }
+  .tool-btn.close svg{width:16px;height:16px}
+
+  .flip-stage{
+    flex:1;display:flex;align-items:center;justify-content:center;
+    overflow:hidden;padding:20px;position:relative;
+  }
+  .flip-loader{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    color:rgba(255,255,255,0.7);font-size:13px;gap:14px;
+    pointer-events:none;transition:opacity 0.3s ease;
+  }
+  .flip-loader.hidden{opacity:0}
+  .flip-loader .spinner{
+    width:38px;height:38px;border-radius:50%;
+    border:2.5px solid rgba(255,255,255,0.15);
+    border-top-color:var(--gold);
+    animation:spin 0.9s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  #book{
+    max-width:100%;max-height:100%;
+  }
+
+  .flip-controls{
+    display:flex;align-items:center;justify-content:center;gap:14px;
+    padding:14px 18px 22px;
+    background:rgba(20,12,8,0.6);
+    border-top:1px solid rgba(255,255,255,0.08);
+    flex-shrink:0;
+  }
+  .nav-btn{
+    width:44px;height:44px;border-radius:50%;
+    background:rgba(255,255,255,0.1);color:#fff;
+    border:1px solid rgba(255,255,255,0.15);
+    display:inline-flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:background 0.15s ease, transform 0.1s ease;
+  }
+  .nav-btn:hover:not(:disabled){background:rgba(255,255,255,0.18)}
+  .nav-btn:active:not(:disabled){transform:scale(0.95)}
+  .nav-btn:disabled{opacity:0.35;cursor:not-allowed}
+  .nav-btn svg{width:18px;height:18px}
+  .page-counter{
+    font-family:'Fraunces',serif;color:#fff;font-size:15px;
+    min-width:80px;text-align:center;
+  }
+  .page-counter span{font-weight:500}
+  .page-counter small{display:block;font-family:'DM Sans',sans-serif;font-size:9.5px;color:rgba(255,255,255,0.45);letter-spacing:0.18em;text-transform:uppercase;margin-top:2px;font-weight:600}
+
   @media (max-width:560px){
-    .wrap{padding:24px 18px 28px}
-    header{margin-bottom:8px;flex-wrap:wrap}
-    .badges{justify-content:flex-start;margin-top:8px}
-    main{padding:28px 0 16px}
-    .hero{margin-bottom:32px}
-    .eyebrow{font-size:10px}
-    .eyebrow::before, .eyebrow::after{width:20px}
+    .wrap{padding:20px 18px 28px}
+    header{flex-wrap:wrap;gap:10px}
+    .badges{justify-content:flex-start;width:100%}
+    main{padding:18px 0 12px}
+    .brand-block{margin-bottom:28px}
+    .brand-logo{width:110px}
+    .brand-suffix{font-size:12px;letter-spacing:0.38em}
+    .hero{margin-bottom:24px}
     .cards{gap:10px;margin-bottom:24px}
-    .card{padding:16px 18px}
-    .cta{padding:13px 22px;font-size:14px;width:100%;justify-content:center}
-    .cta-row{flex-direction:column;align-items:stretch}
+    .card{padding:14px 16px}
+    .cta{padding:15px 22px;font-size:14.5px}
+    .flip-modal .toolbar{padding:12px 14px}
+    .toolbar-title{font-size:14px}
+    .tool-btn span{display:none}
+    .tool-btn{padding:8px 10px}
+    .flip-stage{padding:10px}
+    .flip-controls{gap:10px;padding:10px 12px 18px}
+    .nav-btn{width:40px;height:40px}
+    .nav-btn svg{width:16px;height:16px}
   }
 </style>
 </head>
@@ -240,23 +355,7 @@
 <div class="grain"></div>
 <div class="wrap">
   <header>
-    <div class="crest">
-      <div class="crest-mark">
-        <!-- Stylised logo mark: red A-form with gold swoosh, echoing the printed brand -->
-        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Gold swoosh underneath -->
-          <path d="M 8 78 Q 50 92 92 78 L 88 84 Q 50 96 12 84 Z" fill="#E8A33D"/>
-          <!-- Red A-shape body -->
-          <path d="M 50 16 L 22 76 L 36 76 L 41 64 L 59 64 L 64 76 L 78 76 Z M 45 54 L 50 36 L 55 54 Z" fill="#C13927"/>
-          <!-- Green accent dot -->
-          <circle cx="58" cy="34" r="4" fill="#5B8C3E"/>
-        </svg>
-      </div>
-      <div class="crest-text">
-        Nejoum Noof
-        <small>Qaser Al Noof Cafeteria</small>
-      </div>
-    </div>
+    <div></div>
     <div class="badges">
       <div class="badge-24">
         <span class="dot-pulse"></span>
@@ -265,18 +364,43 @@
       <div class="badge-cards">💳 Cards accepted</div>
     </div>
   </header>
+
   <main>
+    <div class="brand-block">
+      <img class="brand-logo" src="assets/logo.png" alt="Nejoum Noof logo">
+      <div class="brand-wordmark">
+        <span class="brand-qaser">Qaser</span>
+        <span class="brand-name">Nejoum Noof</span>
+        <span class="brand-suffix">CAFETERIA</span>
+      </div>
+      <div class="brand-arabic"><span class="small">كافتيريا قصر</span> نجوم نوف</div>
+    </div>
+
     <section class="hero">
       <div class="eyebrow">Welcome · أهلاً وسهلاً</div>
-      <h1>
-        Our digital menu is<br>
-        <em>almost ready.</em>
+      <h1 class="hero-title">
+        Hungry? <em>Browse our full menu</em> below.
       </h1>
       <p class="lede">
-        We're putting the finishing touches on a beautiful new way to browse our menu and order — right from your table, your car, or wherever you happen to be.
+        Tap to flip through our full menu — or call, message us on WhatsApp, or find us in Sharjah.
       </p>
-      <p class="arabic">قائمتنا الرقمية الجديدة في الطريق إليك</p>
     </section>
+
+    <div class="cta-row">
+      <button class="cta cta-menu" id="open-menu-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        View Full Menu
+      </button>
+      <a class="cta cta-whatsapp" href="https://wa.me/971507964499?text=Hi%20Nejoum%20Noof%2C%20I%27d%20like%20to%20place%20an%20order">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.3 0-.5-.1-.1-.6-1.5-.9-2-.2-.5-.5-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.2 0 1.3 1 2.6 1.1 2.8.1.2 1.9 2.9 4.6 4.1 1.6.7 2.2.7 3 .6.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.2-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.7.4 3.4 1.3 4.9L2 22l5.3-1.3c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+        Order on WhatsApp · 050 796 4499
+      </a>
+      <a class="cta cta-call" href="tel:+97165453538">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Call · 06 545 3538
+      </a>
+    </div>
+
     <section class="cards">
       <a class="card" href="https://maps.google.com/?q=Al+Hooshi+Maliha+Street+Sharjah" target="_blank" rel="noopener">
         <div class="card-icon">
@@ -286,16 +410,6 @@
         <div class="card-value">
           Al Hooshi, Sharjah
           <small>Maliha Street · Tap for Maps</small>
-        </div>
-      </a>
-      <a class="card" href="tel:+97165453538">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        </div>
-        <div class="card-label">Call us</div>
-        <div class="card-value">
-          06 545 3538
-          <small>Tap to call · Landline</small>
         </div>
       </a>
       <div class="card">
@@ -308,13 +422,18 @@
           <small>Every day, all day</small>
         </div>
       </div>
+      <div class="card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        </div>
+        <div class="card-label">Payment</div>
+        <div class="card-value">
+          Cards & cash
+          <small>5% VAT included</small>
+        </div>
+      </div>
     </section>
-    <div class="cta-row">
-      <a class="cta cta-whatsapp" href="https://wa.me/971507964488?text=Hi%20Nejoum%20Noof%2C%20I%27d%20like%20to%20place%20an%20order">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.3 0-.5-.1-.1-.6-1.5-.9-2-.2-.5-.5-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.2 0 1.3 1 2.6 1.1 2.8.1.2 1.9 2.9 4.6 4.1 1.6.7 2.2.7 3 .6.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.2-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.7.4 3.4 1.3 4.9L2 22l5.3-1.3c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
-        Order on WhatsApp · 050 796 4488
-      </a>
-    </div>
+
     <div class="socials">
       <a class="social" href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
@@ -323,15 +442,223 @@
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
       </a>
       <a class="social" href="https://snapchat.com/" target="_blank" rel="noopener" aria-label="Snapchat">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.166 1.5C9.143 1.522 6.297 3.42 5.31 6.276c-.36 1.05-.376 2.075-.405 3.143-.012.522-.024 1.061-.07 1.628-.046.067-.218.193-.34.27-.207.13-.443.277-.685.494-.16.146-.36.397-.36.752 0 .506.45.957 1.247 1.305.087.04.225.094.397.16.193.075.42.16.671.275-.039.34-.205.969-.737 1.962-.318.595-.804 1.16-1.439 1.668-.787.628-1.643.913-2.535.85a.563.563 0 0 0-.586.51.564.564 0 0 0 .451.617c.41.092.86.222 1.32.385.16.058.343.236.555.443.51.504 1.214 1.193 2.357 1.193.149 0 .302-.013.46-.038.602-.096 1.122-.025 1.732.144.555.151 1.18.326 1.92.426.34.046.69.04 1.038.04l.07.001.07-.001c.349 0 .697.005 1.038-.04.74-.1 1.365-.275 1.918-.426.61-.169 1.13-.24 1.733-.144.16.025.313.038.46.038 1.144 0 1.847-.689 2.358-1.193.212-.207.395-.385.555-.443.46-.163.91-.293 1.32-.385a.564.564 0 0 0 .451-.617.563.563 0 0 0-.586-.51c-.892.062-1.748-.222-2.535-.85-.635-.508-1.121-1.073-1.439-1.668-.532-.993-.698-1.622-.737-1.962.252-.114.478-.2.671-.275.173-.066.31-.12.397-.16.798-.348 1.247-.799 1.247-1.305 0-.355-.2-.606-.36-.752-.242-.217-.478-.364-.685-.494-.122-.077-.294-.203-.34-.27-.046-.567-.058-1.106-.07-1.628-.029-1.068-.045-2.093-.405-3.143C17.703 3.42 14.858 1.522 11.834 1.5h.332z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5C8.7 1.5 6 4.2 6 7.5v2.4c-.4.3-1 .6-1.5.6-.5 0-.9.4-.9.9 0 .4.3.7.6.9.5.2 1.2.4 1.7.7-.1.5-.4 1.2-1 1.9-.7.8-1.7 1.3-2.7 1.4-.4 0-.7.4-.7.8 0 .3.2.6.5.7.6.2 1.3.4 1.9.6.2.1.4.3.5.5.4.4.9 1 1.7 1 .3 0 .6-.1.9-.1.3 0 .6 0 .9.1.7.2 1.5.5 2.5.5 1 0 1.8-.3 2.5-.5.3-.1.6-.1.9-.1.3 0 .6.1.9.1.8 0 1.3-.6 1.7-1 .1-.2.3-.4.5-.5.6-.2 1.3-.4 1.9-.6.3-.1.5-.4.5-.7 0-.4-.3-.8-.7-.8-1-.1-2-.6-2.7-1.4-.6-.7-.9-1.4-1-1.9.5-.3 1.2-.5 1.7-.7.3-.2.6-.5.6-.9 0-.5-.4-.9-.9-.9-.5 0-1.1-.3-1.5-.6V7.5c0-3.3-2.7-6-6-6z"/></svg>
       </a>
     </div>
+
     <div class="divider">✦</div>
   </main>
+
   <footer>
-    <div>© 2026 Qaser Nejoum Al Noof Cafeteria · Al Hooshi, Maliha Street, Sharjah · UAE</div>
+    <div>© 2026 Qaser Nejoum Noof Cafeteria · Al Hooshi, Maliha Street, Sharjah · UAE</div>
     <div class="powered">Online menu by <a href="https://cupcloud.ae">cupcloud.ae</a></div>
   </footer>
 </div>
+
+<!-- ===================== FLIPBOOK MODAL ===================== -->
+<div class="flip-modal" id="flip-modal" aria-hidden="true" role="dialog" aria-label="Menu flipbook">
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <img class="toolbar-logo" src="assets/logo.png" alt="">
+      <div class="toolbar-title">
+        Nejoum Noof
+        <small>Full Menu</small>
+      </div>
+    </div>
+    <div class="toolbar-right">
+      <a class="tool-btn" href="assets/menu.pdf" target="_blank" rel="noopener" title="Download PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>PDF</span>
+      </a>
+      <button class="tool-btn close" id="close-menu-btn" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="flip-stage">
+    <div class="flip-loader" id="flip-loader">
+      <div class="spinner"></div>
+      <div>Preparing your menu…</div>
+    </div>
+    <div id="book"></div>
+  </div>
+  <div class="flip-controls">
+    <button class="nav-btn" id="prev-btn" aria-label="Previous page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="page-counter">
+      <span id="current-page">1</span> / <span id="total-pages">14</span>
+      <small>Page</small>
+    </div>
+    <button class="nav-btn" id="next-btn" aria-label="Next page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+<script>
+(function(){
+  const TOTAL_PAGES = 14;
+  const PAGES = Array.from({length: TOTAL_PAGES}, (_, i) =>
+    'assets/pages/page-' + String(i + 1).padStart(2, '0') + '.jpg'
+  );
+
+  const modal = document.getElementById('flip-modal');
+  const openBtn = document.getElementById('open-menu-btn');
+  const closeBtn = document.getElementById('close-menu-btn');
+  const bookEl = document.getElementById('book');
+  const loader = document.getElementById('flip-loader');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const currentPageEl = document.getElementById('current-page');
+  const totalPagesEl = document.getElementById('total-pages');
+
+  let pageFlip = null;
+  let initialized = false;
+
+  totalPagesEl.textContent = TOTAL_PAGES;
+
+  function getBookSize(){
+    // Calculate available space
+    const stage = document.querySelector('.flip-stage');
+    const stageRect = stage.getBoundingClientRect();
+    const padding = 20;
+    const maxW = stageRect.width - padding * 2;
+    const maxH = stageRect.height - padding * 2;
+
+    // PDF pages are 1473x1040 (landscape, ~1.416 aspect ratio width/height)
+    const pageAspect = 1473 / 1040;
+    const isMobile = window.innerWidth < 768;
+
+    let w, h;
+    if (isMobile) {
+      // Single page mode on mobile — page is shown alone
+      w = Math.min(maxW, 600);
+      h = w / pageAspect;
+      if (h > maxH) { h = maxH; w = h * pageAspect; }
+    } else {
+      // Two-page spread on desktop — width is doubled
+      // We pass width = single-page width; library doubles for spread
+      const spreadW = Math.min(maxW, 1400);
+      w = spreadW / 2;
+      h = w / pageAspect;
+      if (h > maxH) { h = maxH; w = h * pageAspect; }
+    }
+    return { width: Math.round(w), height: Math.round(h) };
+  }
+
+  function initFlipbook(){
+    if (initialized) return;
+    initialized = true;
+
+    const size = getBookSize();
+
+    pageFlip = new St.PageFlip(bookEl, {
+      width: size.width,
+      height: size.height,
+      size: 'stretch',
+      minWidth: 280,
+      maxWidth: 1000,
+      minHeight: 200,
+      maxHeight: 1400,
+      maxShadowOpacity: 0.5,
+      showCover: true,
+      mobileScrollSupport: false,
+      usePortrait: window.innerWidth < 768,
+      flippingTime: 700,
+      drawShadow: true,
+      useMouseEvents: true,
+      swipeDistance: 30,
+    });
+
+    pageFlip.loadFromImages(PAGES);
+
+    pageFlip.on('flip', (e) => {
+      // e.data is the current page index (0-based)
+      currentPageEl.textContent = e.data + 1;
+      updateNavButtons(e.data);
+    });
+
+    pageFlip.on('init', () => {
+      // Hide loader once book is initialized
+      setTimeout(() => loader.classList.add('hidden'), 200);
+      updateNavButtons(0);
+    });
+
+    pageFlip.on('changeState', (e) => {
+      // Could hook into 'read' state if needed
+    });
+  }
+
+  function updateNavButtons(currentIndex){
+    prevBtn.disabled = currentIndex <= 0;
+    nextBtn.disabled = currentIndex >= TOTAL_PAGES - 1;
+  }
+
+  function openModal(){
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    // Init after modal is visible so size calc is correct
+    requestAnimationFrame(() => {
+      setTimeout(initFlipbook, 50);
+    });
+  }
+
+  function closeModal(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+  }
+
+  openBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+
+  prevBtn.addEventListener('click', () => {
+    if (pageFlip) pageFlip.flipPrev();
+  });
+  nextBtn.addEventListener('click', () => {
+    if (pageFlip) pageFlip.flipNext();
+  });
+
+  // ESC to close
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) {
+      closeModal();
+    }
+    if (modal.classList.contains('open') && pageFlip) {
+      if (e.key === 'ArrowLeft') pageFlip.flipPrev();
+      if (e.key === 'ArrowRight') pageFlip.flipNext();
+    }
+  });
+
+  // Click on backdrop (not on book/toolbar/controls) closes modal
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // Handle resize — destroy and re-init for clean sizing
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    if (!modal.classList.contains('open') || !pageFlip) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      try {
+        const currentIdx = pageFlip.getCurrentPageIndex();
+        pageFlip.destroy();
+        bookEl.innerHTML = '';
+        initialized = false;
+        initFlipbook();
+        setTimeout(() => {
+          if (pageFlip && currentIdx > 0) pageFlip.flip(currentIdx, 'top');
+        }, 100);
+      } catch(err) {
+        console.warn('Resize re-init failed:', err);
+      }
+    }, 200);
+  });
+})();
+</script>
 </body>
 </html>
